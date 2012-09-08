@@ -6,8 +6,8 @@ require 'serial_preference/version'
 Gem::Specification.new do |gem|
   gem.name          = "serial_preference"
   gem.version       = SerialPreference::VERSION
-  gem.authors       = ["amitsuroliya"]
-  gem.email         = ["amitkumarsuroliya@gmail.com"]
+  gem.authors       = ["Aditya Sanghi"]
+  gem.email         = ["aditya.sanghi@risingsuntech.net"]
   gem.description   = %q{TODO: Write a gem description}
   gem.summary       = %q{TODO: Write a gem summary}
   gem.homepage      = ""
