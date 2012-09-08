@@ -19,17 +19,17 @@ module Preferencability
   module ClassMethods
 
     def preferences_for(group_name)
-      SerialPreference.group_for(self.preference_context)[group_name].try(:preference_keys) || []
+      SerialPreference::Preferenzer.group_for(self.preference_context)[group_name].try(:preference_keys) || []
     end
 
     def draw_preference_map(store_accessor = :preferences, context = nil, &block)
       self.preference_context = context || self.preference_context
-      SerialPreference.draw(preference_context,&block)
+      SerialPreference::Preferenzer.draw(preference_context,&block)
       prefers(store_accessor,preference_context)
     end
 
     def default_preference_for(name)
-      SerialPreference.preference(name,nil,preference_context)
+      SerialPreference::Preferenzer.preference(name,nil,preference_context)
     end
 
     def prefers(store_accessor = :preferences, context = nil)
@@ -37,17 +37,17 @@ module Preferencability
       self.preference_storage_attribute = store_accessor || self.preference_storage_attribute
       serialize preference_storage_attribute, Hash
 
-      preferences = SerialPreference.preferences_for(preference_context)
+      preferences = SerialPreference::Preferenzer.preferences_for(preference_context)
 
       preferences.each do |preference|
         key = preference.name
         define_method("#{key}=") do |value|
-          send(:preferences)[key] = SerialPreference.preference(key,value,context)
+          send(:preferences)[key] = SerialPreference::Preferenzer.preference(key,value,context)
           send("preferences_will_change!")
         end
 
         define_method(key) do
-          SerialPreference.preference(key,send(:preferences)[key],context)
+          SerialPreference::Preferenzer.preference(key,send(:preferences)[key],context)
         end
 
         if preference.required?
