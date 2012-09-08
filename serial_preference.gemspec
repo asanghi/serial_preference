@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = SerialPreference::VERSION
   gem.authors       = ["Aditya Sanghi"]
   gem.email         = ["aditya.sanghi@risingsuntech.net"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Serialized Preferences for your models}
+  gem.summary       = %q{Serialized Preferences for your models}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
