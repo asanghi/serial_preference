@@ -2,7 +2,7 @@ require 'singleton'
 require "serial_preference/version"
 require 'serial_preference/preference'
 require 'serial_preference/preference_group'
-require "serial_preference/preferencability"
+require "serial_preference/has_preference_map"
 
 module SerialPreference
 	class Preferenzer
