@@ -34,7 +34,7 @@ module SerialPreference
 
 		def preference_group(name, opts={},&block)
 			self.preference_groups[current_context] ||= {}
-			self.preference_groups[current_context][name] ||= PreferenceGroup.new(name,opts)
+			self.preference_groups[current_context][name] ||= SerialPreference::PreferenceGroup.new(name,opts)
 			self.preference_groups[current_context][name].instance_exec(&block)
 		end
 
@@ -83,7 +83,7 @@ module SerialPreference
 
 		def base_group
 			@base_group ||= begin
-				pg = PreferenceGroup.new(:base,:label => current_context.to_s.titleize)
+				pg = SerialPreference::PreferenceGroup.new(:base,:label => current_context.to_s.titleize)
 				self.preference_groups[current_context] ||= {}
 				self.preference_groups[current_context][:base] = pg
 				pg
