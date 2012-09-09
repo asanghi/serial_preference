@@ -38,6 +38,12 @@ module SerialPreference
         when :float, :real
           value.to_f
         when :boolean
+          return false if value == 0
+          return false if value == ""
+          return false if value == nil
+          return false if value.to_s.downcase == "false"
+          return false if value == "0"
+          return false if value.to_s.downcase == "no"
           !!value
         else
           nil
