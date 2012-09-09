@@ -33,9 +33,10 @@ Or install it yourself as:
 
 ## Usage
 
+````ruby
     class Company < ActiveRecord::Base
 
-      include SerialPreference::Preferencability # will change this
+      include HasPreferenceMap
 
       preference_map :preferences do
 
@@ -65,6 +66,7 @@ Or install it yourself as:
       end
 
     end
+````
 
 ## Contributing
 
