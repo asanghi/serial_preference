@@ -19,7 +19,15 @@ module SerialPreference
 			i.instance_exec(&block)
 		end
 
-		def pref(name,opts = {})
+    def +(name,opts = {})
+      preference(name,opts)
+    end
+
+    def *(name,opts = {},&block)
+      preference_group(name,opts,&block)
+    end
+
+		def preference(name,opts = {})
 			pg = base_group
 			pg.pref(name,opts)
 		end

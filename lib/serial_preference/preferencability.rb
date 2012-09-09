@@ -22,7 +22,7 @@ module Preferencability
       SerialPreference::Preferenzer.group_for(self.preference_context)[group_name].try(:preference_keys) || []
     end
 
-    def draw_preference_map(store_accessor = :preferences, context = nil, &block)
+    def preference_map(store_accessor = :preferences, context = nil, &block)
       self.preference_context = context || self.preference_context
       SerialPreference::Preferenzer.draw(preference_context,&block)
       prefers(store_accessor,preference_context)
