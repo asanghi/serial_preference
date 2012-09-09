@@ -4,64 +4,73 @@ module HasPreferenceMap
   included do
     class_attribute :preference_context
     class_attribute :preference_storage_attribute
-    self.preference_context = table_name.downcase.to_sym
     self.preference_storage_attribute = :preferences
+    self.preference_context = "#{preference_storage_attribute}_#{table_name.downcase}".to_sym
   end
 
-  def default_preference_for(name,context = nil)
-    self.class.default_preference_for(name,context)
+  def default_preference_for(name)
+    self.class.default_preference_for(name)
   end
 
-  def preferences_for(group_name,storage_accessor = nil, context = nil)
-    send(storage_accessor || preference_storage_attribute).slice(*self.class.preferences_for(group_name,context))
+  def preferences_for(group_name)
+    send(preference_storage_attribute).slice(*self.class.preferences_for(group_name))
+  end
+
+  def preference_map
+    SerialPreference::Preferenzer.preferences_for(self.class.preference_context)
   end
 
   module ClassMethods
 
-    def preferences_for(group_name,context = nil)
-      SerialPreference::Preferenzer.group_for(context || preference_context)[group_name].try(:preference_keys) || []
+    def preference_groups
+      SerialPreference::Preferenzer.group_for(preference_context).try(:values) || []
     end
 
-    def preference_map(store_accessor = :preferences, context = nil, &block)
-      pc = context || preference_context
-      sa = store_accessor || self.preference_storage_attribute
-      SerialPreference::Preferenzer.draw(pc,&block)
-      prefers(sa,pc)
+    def preferences_for(group_name)
+      SerialPreference::Preferenzer.group_for(preference_context)[group_name].try(:preference_keys) || []
     end
 
-    def default_preference_for(name,context = nil)
-      SerialPreference::Preferenzer.preference(name,nil,context || preference_context)
+    def preference_map(store_attribute = nil, &block)
+      self.preference_storage_attribute = store_attribute || preference_storage_attribute
+      self.preference_context = "#{preference_storage_attribute}_#{table_name.downcase}".to_sym
+      SerialPreference::Preferenzer.reset(preference_context)
+      preferences = SerialPreference::Preferenzer.draw(preference_context,&block)
+
+      make_functions(preferences,store_attribute,preference_context)
     end
 
-    def prefers(store_accessor = :preferences, context = nil)
-      pc = context || preference_context
-      sa = store_accessor || self.preference_storage_attribute
+    def default_preference_for(name)
+      SerialPreference::Preferenzer.preference(name,nil,preference_context)
+    end
 
-      preferences = SerialPreference::Preferenzer.preferences_for(pc)
+    private
 
-      serialize sa, Hash
+    def make_functions(preferences,store_attribute,context)
+      serialize store_attribute, Hash
 
       preferences.each do |preference|
         key = preference.name
         define_method("#{key}=") do |value|
-          send(store_accessor)[key] = SerialPreference::Preferenzer.preference(key,value,context)
-          send("#{sa}_will_change!")
+          send(store_attribute)[key] = SerialPreference::Preferenzer.preference(key,value,context)
+          send("#{store_attribute}_will_change!")
         end
 
         define_method(key) do
-          SerialPreference::Preferenzer.preference(key,send(sa)[key],context)
+          value = send(store_attribute)[key]
+          SerialPreference::Preferenzer.preference(key,value,context)
         end
 
+        opts = {}
         if preference.required?
-          validates key, :presence => true
+          opts[:presence] = true
         end
-
         if preference.numerical?
-          validates key, :numericality => true, :allow_blank => true
+          opts[:numericality] = true
+          opts[:allow_blank] = true unless opts[:presence].present?
         end
+        validates key, opts if opts.present?
 
       end
-
     end
 
   end

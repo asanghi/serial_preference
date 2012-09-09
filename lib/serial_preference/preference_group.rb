@@ -9,6 +9,14 @@ module SerialPreference
       @label = opts[:label]
     end
 
+    def to_s
+      name.to_s
+    end
+
+    def titleize
+      label
+    end
+
     def label
       @label.presence || name.to_s.titleize
     end

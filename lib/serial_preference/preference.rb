@@ -3,7 +3,7 @@ module SerialPreference
 
     SUPPORTED_TYPES = [:string,:integer,:real,:float,:boolean,:password]
 
-    attr_accessor :data_type, :name, :default, :required, :label, :hint
+    attr_accessor :data_type, :name, :default, :required, :label, :hint, :field_type
 
     def initialize(name,opts = {})
       self.data_type = opts[:data_type] || :string
@@ -12,6 +12,7 @@ module SerialPreference
       self.required = !!opts[:required]
       self.label = opts[:label]
       self.hint = opts[:hint]
+      self.field_type = opts[:field_type]
     end
 
     def required?
@@ -22,8 +23,12 @@ module SerialPreference
       [:integer,:float,:real].include?(data_type)
     end
 
+    def field_type
+      @field_type || (numerical? ? :string : data_type)
+    end
+
     def value(value)
-      value = value.presence || default
+      value = value.nil? ? default : value
       if !value.nil?
         case data_type
         when :string, :password
