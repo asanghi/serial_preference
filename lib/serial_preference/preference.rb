@@ -7,7 +7,7 @@ module SerialPreference
 
     def initialize(name,opts = {})
       self.data_type = opts[:data_type] || :string
-      self.name = name
+      self.name = name.to_s
       self.default = opts[:default]
       self.required = !!opts[:required]
       self.label = opts[:label]
@@ -34,9 +34,9 @@ module SerialPreference
         when :string, :password
           value.to_s
         when  :integer
-          value.to_i
+          value.respond_to?(:to_i) ? value.to_i : nil
         when :float, :real
-          value.to_f
+          value.respond_to?(:to_f) ? value.to_f : nil
         when :boolean
           return false if value == 0
           return false if value == ""

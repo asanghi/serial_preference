@@ -1,25 +1,20 @@
 module SerialPreference
   class PreferenceGroup
 
-    attr_accessor :name, :label
+    attr_reader :name, :label
 
     def initialize(name, opts = {})
       @preferences = {}
-      @name = name
+      @name = name.to_s
       @label = opts[:label]
     end
 
-    def to_s
-      name.to_s
-    end
-
-    def titleize
-      label
-    end
+    alias :to_s :name
 
     def label
-      @label.presence || name.to_s.titleize
+      @label.presence || name.titleize
     end
+    alias :titleize :label
 
     def preference_keys
       @preferences.keys
@@ -40,11 +35,17 @@ module SerialPreference
     end
 
     def respond_to?(name,*opts)
-      @preferences[name].present?
+      SerialPreference::Preference::SUPPORTED_TYPES.include?(name) ||
+      @preferences.has_key?(name) || 
+      super
     end
 
     def method_missing(name,*opts,&block)
-      pref(name,*opts)
+      if @preferences.has_key?(name)
+        @preferences[name]
+      else
+        pref(name,*opts)
+      end
     end
 
   end
