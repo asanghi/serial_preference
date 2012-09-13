@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'serial_preference/preference'
 
 describe SerialPreference::Preference do
 

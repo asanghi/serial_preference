@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'serial_preference/preference'
-require 'serial_preference/preference_group'
 
 describe SerialPreference::PreferenceGroup do
   before do
@@ -24,8 +22,20 @@ describe SerialPreference::PreferenceGroup do
   end
 
   context "should report correct label" do
-    it "should report given label"
-    it "should report titleized name if no label is provided"
+    @pg = described_class.new("group1")
+    it "should report given label" do
+      o1 = @pg.pref(:whatever)
+      o1.label = "xyz"
+      @pg.should respond_to(:label)
+      o1.label.should eq("xyz") 
+    end
+    it "should report titleize have if no label provided" do
+      o2 = @pg.pref(:whatever)
+      o2.label.should eq(nil)
+      o2.name = o2.name.titleize
+      @pg.should respond_to(:label)
+      o2.name.should eq(o2.name.titleize)
+    end
   end
 
   it "should alias titleize to label" do
@@ -33,13 +43,38 @@ describe SerialPreference::PreferenceGroup do
   end
 
   context "should report preference keys" do
-    it "should report blank array when no preferences"
-    it "should report with array of preference names when non-blank"
+    it "should report blank array when no preferences" do
+      @pg.preferences.should eq([]) 
+      @pg.preference_keys.should eq([])  
+    end  
+    it "should report with array of preference names when non-blank" do
+      @pg = described_class.new("group2")
+      o = @pg.pref(:whatever)
+      o.name.should eq("whatever")
+      @pg.preferences.should include(o)
+      @pg.preference_keys.should include(:whatever)
+      @pg.preferences.should_not eq([])
+      @pg.preference_keys.should eq([:whatever]) 
+    end
   end
 
   context "should report preference values" do
-    it "should report blank array when no preferences"
-    it "should report with array of preference objects when non-blank"
+    it "should report blank array when no preferences" do
+      @pg.preferences.should eq([]) 
+      @pg.preference_keys.should eq([]) 
+    end
+
+    it "should report with array of preference objects when non-blank" do
+      @pg = described_class.new("group3")
+      o = @pg.pref(:whatever)
+      @pg.preferences.should include(o)
+      @pg.preference_keys.should include(:whatever)
+      @pg.preferences.should_not eq([])
+      @pg.preference_keys.should eq([:whatever])
+      @pg.preferences.each do |obj|
+        obj.should be_kind_of(Object)
+      end  
+    end
   end
 
   context "should allow addition of preferences" do
@@ -88,6 +123,25 @@ describe SerialPreference::PreferenceGroup do
 
     end
 
+    it "should allow creation of multiple preferences using instance exec" do
+      @pg.instance_exec do
+        preference :sms_user
+        pref :sms_password
+        integer :sms_number
+        boolean :sms_enabled
+      end
+      @pg.preference_keys.should include(:sms_password, :sms_enabled, :sms_user, :sms_number)
+    end
+
+  end
+
+  context "deletion of preferences" do
+    it "should allow an existing preference to be deleted" do
+      @pg.blah
+      @pg.preference_keys.should include(:blah)
+      @pg.remove_preference(:blah)
+      @pg.preference_keys.should_not include(:blah)
+    end
   end
 
 end

@@ -40,7 +40,7 @@ module HasPreferenceMap
     end
 
     def default_preference_for(name)
-      SerialPreference::Preferenzer.preference(name,nil,preference_context)
+      SerialPreference::Preferenzer.preference_value(name,nil,preference_context)
     end
 
     private
@@ -51,13 +51,20 @@ module HasPreferenceMap
       preferences.each do |preference|
         key = preference.name
         define_method("#{key}=") do |value|
-          send(store_attribute)[key] = SerialPreference::Preferenzer.preference(key,value,context)
+          send(store_attribute)[key] = SerialPreference::Preferenzer.preference_value(key,value,context)
           send("#{store_attribute}_will_change!")
         end
 
         define_method(key) do
           value = send(store_attribute)[key]
-          SerialPreference::Preferenzer.preference(key,value,context)
+          SerialPreference::Preferenzer.preference_value(key,value,context)
+        end
+
+        if preference.boolean?
+          define_method("#{key}?") do
+            value = send(store_attribute)[key]
+            SerialPreference::Preferenzer.preference_value(key,value,context)
+          end
         end
 
         opts = {}

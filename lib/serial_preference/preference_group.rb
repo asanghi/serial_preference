@@ -1,3 +1,4 @@
+require 'active_support/all'
 module SerialPreference
   class PreferenceGroup
 
@@ -10,6 +11,10 @@ module SerialPreference
     end
 
     alias :to_s :name
+
+    def remove_preference(preference_name)
+      @preferences.delete(preference_name)
+    end
 
     def label
       @label.presence || name.titleize
@@ -27,6 +32,7 @@ module SerialPreference
     def pref(name,opts = {})
       @preferences[name] = Preference.new(name,opts)
     end
+    alias :preference :pref
 
     SerialPreference::Preference::SUPPORTED_TYPES.each do |dt|
       define_method dt do |name,opts = {}|
