@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SerialPreference::Preference do
+describe SerialPreference::PreferenceDefinition do
 
   before do
     @blank_pref = described_class.new("whatever")
@@ -46,7 +46,7 @@ describe SerialPreference::Preference do
     end
 
     it "should be numerical when data_type is numerical" do
-      [:integer,:float,:real].each do |dt|
+      [:integer,:float,:decimal].each do |dt|
         described_class.new("whatever",{data_type: dt}).should be_numerical
       end
     end
@@ -112,24 +112,18 @@ describe SerialPreference::Preference do
         p.value(nil).should eq("dog".to_i)
       end
     end
-  
+
     context "should report correct string/password values" do
       before do
         @preference = described_class.new("whatever",{data_type: :string})
       end
 
-      it "should return correct strings" do
-        ["",1,3.0,[],{},"dog"].each do |input_val|
+      it "should return correct strings as passthru" do
+        ["",3.0,[],{},"dog",1].each do |input_val|
           @preference.value(input_val).should eq(input_val.to_s)
         end
       end
 
-      it "should return correct password" do
-        @preference = described_class.new("whatever",{data_type: :password})
-        ["",1,3.0,[],{},"dog"].each do |input_val|
-          @preference.value(input_val).should eq(input_val.to_s)
-        end
-      end
     end
 
     context "should report correct integer values" do
