@@ -3,7 +3,7 @@ describe SerialPreference::HasSerialPreferences do
 
   before do
     class DummyClass < ActiveRecord::Base
-      include SerialPreference::Preferenzer
+      include SerialPreference::HasSerialPreferences
       preferences :settings do
         preference_group :general_settings do
           company_name_in_hi :label => "Company Name in Hindi"
