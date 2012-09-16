@@ -2,9 +2,9 @@ require 'spec_helper'
 describe SerialPreference::HasSerialPreferences do
 
   before do
-    class DummyClass
+    class DummyClass < ActiveRecord::Base
       include SerialPreference::Preferenzer
-      preference_map :settings do
+      preferences :settings do
         preference_group :general_settings do
           company_name_in_hi :label => "Company Name in Hindi"
           records_per_page :data_type => :integer, :default => 10
