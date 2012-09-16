@@ -12,7 +12,7 @@ module SerialPreference
     module ClassMethods
 
       def preferences(storage_attribute = nil, &block)
-        self._preference_attribute = storage_attribute || self._preference_attribute
+        self._preferences_attribute = storage_attribute || self._preference_attribute
         _preference_map.draw(&block)
         build_preference_definitions
       end
