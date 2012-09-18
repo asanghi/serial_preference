@@ -1,17 +1,13 @@
 $:.unshift File.expand_path('..', __FILE__)
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'rspec'
-require 'active_support'
-require 'serial_preference/preference'
-require 'serial_preference/preference_group'
-require 'serial_preference'
+require 'active_support/all'
 require 'active_record'
+require "serial_preference/version"
+require 'serial_preference/preference_definition'
+require "serial_preference/preferenzer"
+require "serial_preference/has_preference_map"
+
 
 RSpec.configure do |config|
-  config.before(:each) do
-    @instance = @preferenzer = SerialPreference::Preferenzer.instance.tap do |i|
-      i.total_reset
-    end
-  end
-
 end
