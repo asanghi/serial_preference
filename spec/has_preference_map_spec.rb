@@ -48,6 +48,42 @@ describe SerialPreference::HasSerialPreferences do
     end
   end
 
+
+  context "boolean behaviour" do
+    it "should be return correct boolean behaviour" do
+      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[0].boolean?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[1].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[1].boolean?.should eq(true)
+    end
+  end
+
+  context "numerical behaviour" do
+    it "should be return correct numerical behaviour" do
+      DummyClass._preference_map.all_preference_definitions[2].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[2].numerical?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[3].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[3].numerical?.should eq(true)
+    end
+  end
+
+  context "required behaviour" do
+    it "should be return correct required behaviour" do
+      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[0].required?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[1].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[1].required?.should eq(false)
+    end
+  end
+
+  context "define method behaviour" do
+    it "should be call through class" do
+      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[0].name.should eq("taxable")
+      DummyClass._preference_map.all_preference_definitions[0].name = "taxable".should eq("taxable")
+    end
+  end
+
   context "all_preference_names behaviour" do
     it "should include all_preference_names" do
       DummyClass._preference_map.all_preference_names.should eq(["taxable", "vat_no", "max_invoice_items", "income_ledger_id", "base"])
