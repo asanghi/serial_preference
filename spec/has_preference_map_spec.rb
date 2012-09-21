@@ -2,7 +2,9 @@ require 'spec_helper'
 describe SerialPreference::HasSerialPreferences do
 
   before do
-    class DummyClass < ActiveRecord::Base
+    class DummyClass
+      include ActiveRecord::AttributeMethods::Serialization
+      include ActiveRecord::Validations
       include SerialPreference::HasSerialPreferences
       preferences :settings do
         preference :taxable, data_type: :boolean, required: true, label: "Taxable?", hint: "Is this business taxable?"
@@ -31,101 +33,60 @@ describe SerialPreference::HasSerialPreferences do
     it "should be return an Object when _preference_map call" do
       DummyClass._preference_map.should be_kind_of(Object)
     end
-    it "should be return a collection of array when all_preference_definitions call through _preference_map"  do
-      DummyClass._preference_map.all_preference_definitions.should be_kind_of(Array)
-    end
-    it "should be return collection of array when all_preference_names method call" do
-      DummyClass._preference_map.all_preference_names.should be_kind_of(Array)
-    end
-    it "should be return collection of array when all_preference_names method call" do
-      DummyClass._preference_map.all_groups.should be_kind_of(Array)
-    end
-    it "should be return an Object when preference method call through _preference_map" do
-      DummyClass._preference_map.preference("base").should be_kind_of(Object)
-    end
-    it "should be return an Object when preference method call through _preference_map" do
-      DummyClass._preference_map.preference_groups.should be_kind_of(Array)
+  end
+
+  context "class methods behaviour" do
+    it "should be access through _preference_map attribute" do
+      DummyClass._preference_map.respond_to?(:all_preference_definitions)
+      DummyClass._preference_map.respond_to?(:all_preference_names)
+      DummyClass._preference_map.respond_to?(:all_groups)
+      DummyClass._preference_map.respond_to?(:preference)
+      DummyClass._preference_map.respond_to?(:preference_group)
     end
   end
 
 
+  context "define method behaviour" do
+    it "should be call through class instance" do
+      DummyClass.new.respond_to?(:taxable?)
+      DummyClass.new.respond_to?(:vat_no?)
+      DummyClass.new.respond_to?(:max_invoice_items?)
+      DummyClass.new.respond_to?(:income_ledger_id?)
+      DummyClass.new.respond_to?(:taxable)
+      DummyClass.new.respond_to?(:vat_no)
+      DummyClass.new.respond_to?(:max_invoice_items)
+      DummyClass.new.respond_to?(:income_ledger_id)
+      DummyClass.new.respond_to?(:taxable=)
+      DummyClass.new.respond_to?(:vat_no=)
+      DummyClass.new.respond_to?(:max_invoice_items=)
+      DummyClass.new.respond_to?(:income_ledger_id=)
+    end
+  end
+
   context "boolean behaviour" do
     it "should be return correct boolean behaviour" do
-      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[0].boolean?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[1].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[1].boolean?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:boolean?)
+      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:boolean?)
+      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:boolean?)
+      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:boolean?)
     end
   end
 
   context "numerical behaviour" do
     it "should be return correct numerical behaviour" do
-      DummyClass._preference_map.all_preference_definitions[2].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[2].numerical?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[3].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[3].numerical?.should eq(true)
+      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:numerical?)
+      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:numerical?)
+      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:numerical?)
+      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:numerical?)
     end
   end
 
   context "required behaviour" do
     it "should be return correct required behaviour" do
-      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[0].required?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[1].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[1].required?.should eq(false)
+      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:required?)
+      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:required?)
+      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:required?)
+      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:required?)
     end
   end
-
-  context "define method behaviour" do
-    it "should be call through class" do
-      DummyClass._preference_map.all_preference_definitions[0].name.present?.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[0].name.should eq("taxable")
-      DummyClass._preference_map.all_preference_definitions[0].name = "taxable".should eq("taxable")
-    end
-  end
-
-  context "all_preference_names behaviour" do
-    it "should include all_preference_names" do
-      DummyClass._preference_map.all_preference_names.should eq(["taxable", "vat_no", "max_invoice_items", "income_ledger_id", "base"])
-      DefaultClass._preference_map.all_preference_names.should eq(["abc"])
-    end
-  end
-
-  context "all_preference_definitions behaviour" do
-    it "should be return correct label" do
-      DummyClass._preference_map.all_preference_definitions[0].label.should eq("Taxable?")
-      DummyClass._preference_map.all_preference_definitions[1].label.should eq("VAT")
-    end
-    it "should be correct hint" do
-      DummyClass._preference_map.all_preference_definitions[0].hint.should eq("Is this business taxable?")
-      DefaultClass._preference_map.all_preference_definitions[0].hint.should eq("DefaultClass")
-    end
-    it "should be correct data_type" do
-      DummyClass._preference_map.all_preference_definitions[0].data_type.should eq(:boolean)
-      DummyClass._preference_map.all_preference_definitions[1].data_type.should eq(:string)
-      DummyClass._preference_map.all_preference_definitions[2].data_type.should eq(:integer)
-      DummyClass._preference_map.all_preference_definitions[3].data_type.should eq(:integer)
-    end
-    it "should be return correct required value" do
-      DummyClass._preference_map.all_preference_definitions[0].required.should eq(true)
-      DummyClass._preference_map.all_preference_definitions[1].required.should eq(false)
-    end
-    it "should return correct default value" do
-      DummyClass._preference_map.all_preference_definitions[3].default.should eq(1)
-    end
-  end
-
-  context "all_groups behaviour" do
-    it "should include all_groups" do
-      DummyClass._preference_map.all_groups.should eq([:base, :ledgers])
-      DefaultClass._preference_map.all_groups.should eq([:base])
-    end
-  end
-
-  context "preference behaviour" do
-    it "should be return correct name of given preference" do
-      DummyClass._preference_map.preference("taxable").name.should eq("taxable")
-      DefaultClass._preference_map.preference("abc").name.should eq("abc")
-    end
-  end 
 end
