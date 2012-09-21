@@ -35,11 +35,7 @@ module SerialPreference
     end
 
     def boolean?
-      if (@column.type != :boolean)
-        false
-      else
-        true
-      end
+      @column.type == :boolean
     end
 
     def type_cast(value)
