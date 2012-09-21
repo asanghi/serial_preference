@@ -45,7 +45,7 @@ module SerialPreference
             value = read_store_attribute(_preferences_attribute,key)
             preference.val(key,value)
           end
-
+      
           if preference.boolean?
             define_method("#{key}?") do
               read_store_attribute(_preferences_attribute,key).present?

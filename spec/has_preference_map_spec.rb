@@ -48,10 +48,6 @@ describe SerialPreference::HasSerialPreferences do
 
   context "define method behaviour" do
     it "should be call through class instance" do
-      DummyClass.new.respond_to?(:taxable?)
-      DummyClass.new.respond_to?(:vat_no?)
-      DummyClass.new.respond_to?(:max_invoice_items?)
-      DummyClass.new.respond_to?(:income_ledger_id?)
       DummyClass.new.respond_to?(:taxable)
       DummyClass.new.respond_to?(:vat_no)
       DummyClass.new.respond_to?(:max_invoice_items)
@@ -65,28 +61,7 @@ describe SerialPreference::HasSerialPreferences do
 
   context "boolean behaviour" do
     it "should be return correct boolean behaviour" do
-      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:boolean?)
-      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:boolean?)
-      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:boolean?)
-      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:boolean?)
-    end
-  end
-
-  context "numerical behaviour" do
-    it "should be return correct numerical behaviour" do
-      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:numerical?)
-      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:numerical?)
-      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:numerical?)
-      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:numerical?)
-    end
-  end
-
-  context "required behaviour" do
-    it "should be return correct required behaviour" do
-      DummyClass._preference_map.all_preference_definitions[0].respond_to?(:required?)
-      DummyClass._preference_map.all_preference_definitions[1].respond_to?(:required?)
-      DummyClass._preference_map.all_preference_definitions[2].respond_to?(:required?)
-      DummyClass._preference_map.all_preference_definitions[3].respond_to?(:required?)
+      DummyClass.new.respond_to?(:taxable?)
     end
   end
 end
