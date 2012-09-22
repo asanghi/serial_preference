@@ -29,6 +29,7 @@ describe SerialPreference::PreferenceDefinition do
       [0,"yes","no","false",true].each do |truthy_values|
         p = described_class.new("whatever",{required: truthy_values})
         p.should be_required
+        p.name.should_not be_blank
       end
     end
 
@@ -40,6 +41,23 @@ describe SerialPreference::PreferenceDefinition do
     end
   end
 
+  context "boolean behaviour" do
+    before do
+      @preference = described_class.new("whatever",{data_type: :boolean})
+    end
+    it "should not be boolean when no data_type is provided" do
+      @blank_pref.should_not be_boolean
+    end
+    it "should be return true when data_type is boolean" do
+      @preference.should be_boolean
+    end
+    it "should be return false when data_type is not boolean" do
+      [:string,:password,:whatever,:integer,:float,:decimal].each do |dt|
+        described_class.new("whatever",{data_type: dt}).should_not be_boolean
+      end
+    end  
+  end
+
   context "numericality behaviour" do
     it "should not be numerical when no data_type is provided" do
       @blank_pref.should_not be_numerical
@@ -47,7 +65,9 @@ describe SerialPreference::PreferenceDefinition do
 
     it "should be numerical when data_type is numerical" do
       [:integer,:float,:decimal].each do |dt|
-        described_class.new("whatever",{data_type: dt}).should be_numerical
+        n = described_class.new("whatever",{data_type: dt})
+        n.should be_numerical
+        n.data_type.should be_true
       end
     end
 
