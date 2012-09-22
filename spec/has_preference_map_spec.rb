@@ -64,4 +64,12 @@ describe SerialPreference::HasSerialPreferences do
       DummyClass.new.respond_to?(:taxable?)
     end
   end
+
+  context "boolean behaviour" do
+    it "should be return correct boolean behaviour" do
+      d = DummyClass.new       
+    end
+  end
+
+
 end

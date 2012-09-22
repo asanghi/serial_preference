@@ -68,6 +68,9 @@ describe SerialPreference::PreferenceDefinition do
         n = described_class.new("whatever",{data_type: dt})
         n.should be_numerical
         n.data_type.should be_true
+        b = described_class.new("",{data_type: dt})
+        b.should be_numerical
+        b.name.should be_blank
       end
     end
 
