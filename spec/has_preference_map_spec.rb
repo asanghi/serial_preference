@@ -65,8 +65,8 @@ describe SerialPreference::HasSerialPreferences do
     end
   end
 
-  context "boolean behaviour" do
-    it "should be return correct boolean behaviour" do
+  context "Validations behaviour" do
+    it "should be return correct validation" do
       d = DummyClass.new       
     end
   end
