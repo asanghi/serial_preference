@@ -14,7 +14,7 @@ describe SerialPreference::HasSerialPreferences do
       class OverriddenPreferenceAttributeClass < ActiveRecord::Base
         include SerialPreference::HasSerialPreferences
         preferences :settings  do
-          preference :abc, hint: "DefaultClass"
+          preference :abc
         end
       end
       OverriddenPreferenceAttributeClass._preferences_attribute.should eq(:settings)
@@ -57,6 +57,7 @@ describe SerialPreference::HasSerialPreferences do
 
   end
 
+=begin
   context "should define validations" do
     it "should define presence validation on required preferences" do
       d = DummyClass.new
@@ -77,17 +78,6 @@ describe SerialPreference::HasSerialPreferences do
     end
   end
 
-  context "Validations behaviour" do
-    it "should be return correct validation" do
-      d = DummyClass.new
-      d.respond_to?(:_validators)
-      d._validators.should be_kind_of(Hash)
-      d._validators[:taxable].should be_kind_of(Array)
-      d._validators[:max_invoice_items].should be_kind_of(Array)
-      d._validators[:income_ledger_id].should be_kind_of(Array)
-      d._validators[:taxable][0].options.should eq({})
-      d._validators[:max_invoice_items][0].options.should eq({:allow_blank=>true})
-      d._validators[:income_ledger_id][0].options.should eq({:allow_blank=>true})
-    end
-  end
+=end
+
 end

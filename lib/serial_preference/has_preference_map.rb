@@ -30,12 +30,12 @@ module SerialPreference
 
           key = preference.name
           define_method("#{key}=") do |value|
-            write_preference_attribute(_preferences_attribute,key,value)#preference.value(value))
+            write_preference_attribute(_preferences_attribute,key,preference.value(value))
           end
 
           define_method(key) do
             value = read_preference_attribute(_preferences_attribute,key)
-            #preference.value(value)
+            preference.value(value)
           end
 
           if preference.boolean?
@@ -44,17 +44,6 @@ module SerialPreference
             end
           end
 
-          opts = {}
-          if preference.required?
-            opts[:presence] = true
-          end
-          if preference.numerical?
-            opts[:numericality] = true
-            opts[:allow_blank] = !opts[:presence].present?
-          end
-          if opts.present?
-            validates key, opts
-          end
         end
       end
     end

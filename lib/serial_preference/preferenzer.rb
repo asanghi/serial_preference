@@ -1,11 +1,11 @@
 module SerialPreference
   class Preferenzer
-    PreferenceGroup = Struct.new(:name,:label,:preferences)
+    PreferenceGroup = Struct.new(:name,:preferences)
 
     attr_reader :preference_groups, :current_group
 
     def initialize
-      @preference_names_cache = {}
+      @preference_names_cache = HashWithIndifferentAccess.new
       @preference_groups = []
       activate_group
     end
@@ -15,28 +15,28 @@ module SerialPreference
     end
 
     def respond_to?(name)
-      [:string, :integer, :boolean].include?(name) || @preference_names_cache[name].present? || super
+      [:string, :integer, :boolean, :float].include?(name) || @preference_names_cache[name].present? || super
     end
 
     def method_missing(name,*args,&block)
       preference(name,args.extract_options!)
     end
 
-    [:string,:integer,:boolean].each do |dt|
+    [:string,:integer,:boolean,:float].each do |dt|
       define_method(dt) do |name,opts = {}|
         preference(name,opts.merge!(:data_type => dt))
       end
     end
 
     def preference(name,opts = {})
-      name = name.to_sym
-      push_preference SerialPreference::PreferenceDefinition.new(name,opts)
+      Array(name).each do |n|
+        push_preference SerialPreference::PreferenceDefinition.new(n.to_sym,opts)
+      end
     end
     alias :pref :preference
 
-    def preference_group(name,opts = {},&block)
-      name = name.to_sym
-      activate_group(name,opts[:label])
+    def preference_group(name,&block)
+      activate_group(name)
       instance_exec(&block)
     end
 
@@ -54,8 +54,8 @@ module SerialPreference
 
     private
 
-    def activate_group(group_name = :base,label = nil)
-      @current_group = find_or_create_group(group_name.to_sym,label)
+    def activate_group(group_name = :base)
+      @current_group = find_or_create_group(group_name)
     end
 
     def push_preference(preference)
@@ -63,16 +63,16 @@ module SerialPreference
       @current_group.preferences[preference.name] = preference
     end
 
-    def find_or_create_group(name,label)
-      find_group(name) || create_group(name,label)
+    def find_or_create_group(name)
+      find_group(name) || create_group(name)
     end
 
     def find_group(name)
       @preference_groups.find{|x|x.name == name}
     end
 
-    def create_group(name = :base, label = nil)
-      PreferenceGroup.new(name,label || name.to_s.titleize,{}).tap do |pg|
+    def create_group(name = :base)
+      PreferenceGroup.new(name,{}).tap do |pg|
         @preference_groups.push(pg)
       end
     end

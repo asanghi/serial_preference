@@ -36,37 +36,46 @@ Or install it yourself as:
 ````ruby
     class Company < ActiveRecord::Base
 
-      include HasPreferenceMap
+      include SerialPreference::HasSerialPreferences
 
-      preference_map :preferences do
+      preferences do
 
-        preference :taxable data_type: :boolean, required: true, label: "Taxable?", hint: "Is this business taxable?"
-        preference :vat_no required: false, label: "VAT"
+        preference :taxable data_type: :boolean, required: true
+        preference :vat_no required: false
         preference :max_invoice_items data_type: :integer
 
+        float :rate_of_interest
+
         # default data type is :string
-        # default label is name of preference titleized
         # if the preference is required, then a validation is added to the model
         # if the data type is numerical, then a numericality validation is added
         # preferences can be grouped in preference groups
 
-        preference_group :ledgers, label: "Preferred Ledgers" do
+        preference_group "Preferred Ledgers" do
           income_ledger_id data_type: :integer, default: 1
         end
 
-        # Let me know what you think of this experimental new DSL?
-
-        + :name_of_preference, data_type: :string
-        + :name_of_another_preference, default: "Hello"
-
-        * :name_of_preference_group, label: "Notifications" do
-          + :email_delivery, data_type: :boolean, default: true
-        end
+        password field_type: :password
 
       end
 
     end
 ````
+
+* Fetching Preference/Groups
+
+````ruby
+    # something you can customize in your form perhaps?
+    Company.preference_groups.each do |pg| # => returns an array of preference groups
+      # pg.name => Name of Preference Group as specified in map e.g. Preferred Ledgers
+      # pg.preferences => Hash of Preference Definitions keyed by Preference Name e.g. :taxable, :vat_no etc.
+      pg.preferences.values.each do |preference|
+        # preference => PreferenceDefinition
+        f.input preference.name, required: preference.required?, placeholder: preference.default, as: preference.field_type
+      end
+    end
+````
+
 
 ## Contributing
 

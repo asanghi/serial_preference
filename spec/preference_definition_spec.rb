@@ -7,7 +7,7 @@ describe SerialPreference::PreferenceDefinition do
   end
 
   it "should have proper accessors" do
-    [:data_type, :name, :default, :required, :label, :hint, :field_type].each do |a|
+    [:data_type, :name, :default, :required, :field_type].each do |a|
       @blank_pref.respond_to?(a).should be_true
     end
   end
@@ -70,12 +70,6 @@ describe SerialPreference::PreferenceDefinition do
     end
     it "should be false for required" do
       @blank_pref.required.should be_false
-    end
-    it "should have nil label" do
-      @blank_pref.label.should be_nil
-    end
-    it "should have nil hint" do
-      @blank_pref.hint.should be_nil
     end
     it "should have string field_type" do
       @blank_pref.field_type.should eq(:string)

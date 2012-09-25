@@ -3,18 +3,16 @@ module SerialPreference
 
     SUPPORTED_TYPES = [:string,:integer,:decimal,:float,:boolean]
 
-    attr_accessor :data_type, :name, :default, :required, :label, :hint, :field_type
+    attr_accessor :data_type, :name, :default, :required, :field_type
 
     def initialize(name,*args)
       opts = args.extract_options!
       self.name = name.to_s
-      opts.assert_valid_keys(:data_type,:default,:required,:label,:hint,:field_type)
+      opts.assert_valid_keys(:data_type,:default,:required,:field_type)
       self.data_type = @type = opts[:data_type] || :string
       @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s,opts[:default],@type.to_s)
       self.default = opts[:default]
       self.required = !!opts[:required]
-      self.label = opts[:label]
-      self.hint = opts[:hint]
       self.field_type = opts[:field_type]
     end
 

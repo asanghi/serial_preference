@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SerialPreference::Preferenzer do
 
   before(:each) do
-    @base = described_class::PreferenceGroup.new(:base,"Base",{})
+    @base = described_class::PreferenceGroup.new(:base,{})
     @preferenzer = described_class.new
   end
 
@@ -59,7 +59,7 @@ describe SerialPreference::Preferenzer do
         preference :name
         pref :age, data_type: :integer
         pref :sex, default: "male"
-        preference_group :notifications, label: "Email Notifications" do
+        preference_group "Email Notifications" do
           email default: false
           switch_off_hour default: 23
         end
@@ -105,7 +105,7 @@ describe SerialPreference::Preferenzer do
       @preferenzer.preference_group("string") do
         preference :symbol
       end
-      @preferenzer.all_groups.should include(:string, :symbol)
+      @preferenzer.all_groups.should include("string", :symbol)
     end
   end
 end
