@@ -57,24 +57,24 @@ module SerialPreference
       end
     end
 
-    def value(value)
-      value = value.nil? ? default : value
-      if !value.nil?
+    def value(v)
+      v = v.nil? ? default : v
+      if !v.nil?
         case data_type
         when :string, :password
-          value.to_s
+          v.to_s
         when  :integer
-          value.respond_to?(:to_i) ? value.to_i : nil
+          v.respond_to?(:to_i) ? v.to_i : nil
         when :float, :real
-          value.respond_to?(:to_f) ? value.to_f : nil
+          v.respond_to?(:to_f) ? v.to_f : nil
         when :boolean
-          return false if value == 0
-          return false if value == ""
-          return false if value == nil
-          return false if value.to_s.downcase == "false"
-          return false if value == "0"
-          return false if value.to_s.downcase == "no"
-          !!value
+          return false if v == 0
+          return false if v == ""
+          return false if v == nil
+          return false if v.to_s.downcase == "false"
+          return false if v == "0"
+          return false if v.to_s.downcase == "no"
+          !!v
         else
           nil
         end

@@ -11,26 +11,18 @@ module SerialPreference
 
     module ClassMethods
 
+      def preference_groups
+        _preference_map.preference_groups
+      end
+
       def preferences(storage_attribute = nil, &block)
         self._preferences_attribute = storage_attribute || self._preferences_attribute
         _preference_map.draw(&block)
         build_preference_definitions
       end
 
-      protected
-      def read_store_attribute(store_attribute, key)
-        attribute = initialize_store_attribute(store_attribute)
-        attribute[key]
-      end
-      def write_store_attribute(store_attribute, key, value)
-        attribute = initialize_store_attribute(store_attribute)
-        if value != attribute[key]
-          send :"#{store_attribute}_will_change!"
-          attribute[key] = value
-        end
-      end
-
       private
+
       def build_preference_definitions
         serialize self._preferences_attribute, Hash
 
@@ -38,17 +30,17 @@ module SerialPreference
 
           key = preference.name
           define_method("#{key}=") do |value|
-            write_store_attribute(_preferences_attribute,key,preference.val(key,value))
+            write_preference_attribute(_preferences_attribute,key,value)#preference.value(value))
           end
 
           define_method(key) do
-            value = read_store_attribute(_preferences_attribute,key)
-            preference.val(key,value)
+            value = read_preference_attribute(_preferences_attribute,key)
+            #preference.value(value)
           end
 
           if preference.boolean?
             define_method("#{key}?") do
-              read_store_attribute(_preferences_attribute,key).present?
+              read_preference_attribute(_preferences_attribute,key).present?
             end
           end
 
@@ -58,10 +50,27 @@ module SerialPreference
           end
           if preference.numerical?
             opts[:numericality] = true
-            opts[:allow_blank] = true unless opts[:presence].present?
+            opts[:allow_blank] = !opts[:presence].present?
           end
-          validates key, opts if opts.present?
+          if opts.present?
+            validates key, opts
+          end
         end
+      end
+    end
+
+    protected
+
+    def read_preference_attribute(store_attribute, key)
+      attribute = send(store_attribute)
+      attribute[key]
+    end
+
+    def write_preference_attribute(store_attribute, key, value)
+      attribute = send(store_attribute)
+      if value != attribute[key]
+        send :"#{store_attribute}_will_change!"
+        attribute[key] = value
       end
     end
 
