@@ -43,6 +43,12 @@ describe SerialPreference::HasSerialPreferences do
       d.respond_to?(:write_preference_attribute).should be_true
     end
 
+    it "should ensure that the readers returns the correct data" do
+      d = DummyClass.new
+      d.preferences = {:vat_no => "abc"}
+      d.vat_no.should eq("abc")
+    end
+
     it "should have writers available" do
       d = DummyClass.new
       d.respond_to?(:taxable=).should be_true
@@ -51,11 +57,26 @@ describe SerialPreference::HasSerialPreferences do
       d.respond_to?(:income_ledger_id=).should be_true
     end
 
+    it "should ensure that the writer write the correct data" do
+      d = DummyClass.new
+      d.vat_no = "abc"
+      d.vat_no.should eq("abc")
+    end
+
+    it "should ensure that the querier the correct data" do
+      d = DummyClass.new
+      d.taxable = true
+      d.should be_taxable
+      d.taxable = false
+      d.should_not be_taxable
+    end
+
     it "should have query methods available for booleans" do
       DummyClass.new.respond_to?(:taxable?)
     end
-
   end
+
+
 
 =begin
   context "should define validations" do

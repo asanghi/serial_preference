@@ -34,17 +34,17 @@ module SerialPreference
 
           key = preference.name
           define_method("#{key}=") do |value|
-            write_preference_attribute(_preferences_attribute,key,self.class.preference_definition(key).value(value))
+            write_preference_attribute(self.class._preferences_attribute,key,self.class.preference_definition(key).value(value))
           end
 
           define_method(key) do
-            value = read_preference_attribute(_preferences_attribute,key)
+            value = read_preference_attribute(self.class._preferences_attribute,key)
             self.class.preference_definition(key).value(value)
           end
 
           if preference.boolean?
             define_method("#{key}?") do
-              read_preference_attribute(_preferences_attribute,key).present?
+              read_preference_attribute(self.class._preferences_attribute,key).present?
             end
           end
 
@@ -56,14 +56,14 @@ module SerialPreference
 
     def read_preference_attribute(store_attribute, key)
       attribute = send(store_attribute)
-      attribute[key]
+      attribute[key.to_sym]
     end
 
     def write_preference_attribute(store_attribute, key, value)
       attribute = send(store_attribute)
       if value != attribute[key]
         send :"#{store_attribute}_will_change!"
-        attribute[key] = value
+        attribute[key.to_sym] = value
       end
     end
 
