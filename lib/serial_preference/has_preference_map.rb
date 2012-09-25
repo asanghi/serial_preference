@@ -12,7 +12,7 @@ module SerialPreference
     module ClassMethods
 
       def preferences(storage_attribute = nil, &block)
-        self._preferences_attribute = storage_attribute || self._preference_attribute
+        self._preferences_attribute = storage_attribute || self._preferences_attribute
         _preference_map.draw(&block)
         build_preference_definitions
       end
@@ -34,7 +34,8 @@ module SerialPreference
       def build_preference_definitions
         serialize self._preferences_attribute, Hash
 
-        preferences.each do |preference|
+        _preference_map.all_preference_definitions.each do |preference|
+
           key = preference.name
           define_method("#{key}=") do |value|
             write_store_attribute(_preferences_attribute,key,preference.val(key,value))
