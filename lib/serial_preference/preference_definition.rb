@@ -34,6 +34,10 @@ module SerialPreference
       @column.number?
     end
 
+    def boolean?
+      @column.type == :boolean
+    end
+
     def type_cast(value)
       v = @column.type_cast(value)
       v.nil? ? default_value : v
