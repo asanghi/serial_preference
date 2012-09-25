@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SerialPreference::Preferenzer do
 
   before(:each) do
-    @base = described_class::PreferenceGroup.new(:base,{})
+    @base = described_class::PreferenceGroup.new(:base,[])
     @preferenzer = described_class.new
   end
 

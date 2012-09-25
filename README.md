@@ -68,8 +68,8 @@ Or install it yourself as:
     # something you can customize in your form perhaps?
     Company.preference_groups.each do |pg| # => returns an array of preference groups
       # pg.name => Name of Preference Group as specified in map e.g. Preferred Ledgers
-      # pg.preferences => Hash of Preference Definitions keyed by Preference Name e.g. :taxable, :vat_no etc.
-      pg.preferences.values.each do |preference|
+      # pg.preferences => Array of Preference Definitions
+      pg.preferences.each do |preference|
         # preference => PreferenceDefinition
         f.input preference.name, required: preference.required?, placeholder: preference.default, as: preference.field_type
       end

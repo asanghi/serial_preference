@@ -48,7 +48,7 @@ module SerialPreference
     end
 
     def all_preference_definitions
-      preference_groups.map{|x|x.preferences.values}.flatten
+      @preference_names_cache.values
     end
 
     def all_preference_names
@@ -59,6 +59,10 @@ module SerialPreference
       @preference_groups.map{|x|x.name}
     end
 
+    def definition_for(name)
+      @preference_names_cache[name]
+    end
+
     private
 
     def activate_group(group_name = :base)
@@ -66,8 +70,8 @@ module SerialPreference
     end
 
     def push_preference(preference)
-      @preference_names_cache[preference.name] = 1
-      @current_group.preferences[preference.name] = preference
+      @preference_names_cache[preference.name] = preference
+      @current_group.preferences.push(preference)
     end
 
     def find_or_create_group(name)
@@ -79,7 +83,7 @@ module SerialPreference
     end
 
     def create_group(name = :base)
-      PreferenceGroup.new(name,{}).tap do |pg|
+      PreferenceGroup.new(name,[]).tap do |pg|
         @preference_groups.push(pg)
       end
     end

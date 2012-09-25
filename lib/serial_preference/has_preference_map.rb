@@ -21,6 +21,10 @@ module SerialPreference
         build_preference_definitions
       end
 
+      def preference_definition(name)
+        _preference_map.definition_for(name)
+      end
+
       private
 
       def build_preference_definitions
@@ -30,12 +34,12 @@ module SerialPreference
 
           key = preference.name
           define_method("#{key}=") do |value|
-            write_preference_attribute(_preferences_attribute,key,preference.value(value))
+            write_preference_attribute(_preferences_attribute,key,preference_definition(key).value(value))
           end
 
           define_method(key) do
             value = read_preference_attribute(_preferences_attribute,key)
-            preference.value(value)
+            preference_definition(key).value(value)
           end
 
           if preference.boolean?
