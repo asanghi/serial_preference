@@ -7,11 +7,14 @@ module SerialPreference
     def initialize
       @preference_names_cache = HashWithIndifferentAccess.new
       @preference_groups = []
+      @definition = false
       activate_group
     end
 
     def draw(&block)
+      @defintion = true
       instance_exec(&block)
+      @defintion = false
     end
 
     def respond_to?(name)
@@ -19,7 +22,11 @@ module SerialPreference
     end
 
     def method_missing(name,*args,&block)
-      preference(name,args.extract_options!)
+      if @defintion
+        preference(name,args.extract_options!)
+      else
+        super
+      end
     end
 
     [:string,:integer,:boolean,:float].each do |dt|
