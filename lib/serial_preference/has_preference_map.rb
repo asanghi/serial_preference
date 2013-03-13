@@ -44,7 +44,8 @@ module SerialPreference
 
           if preference.boolean?
             define_method("#{key}?") do
-              read_preference_attribute(self.class._preferences_attribute,key).present?
+              value = read_preference_attribute(self.class._preferences_attribute,key)
+              self.class.preference_definition(key).value(value)
             end
           end
 
