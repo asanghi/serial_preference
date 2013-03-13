@@ -39,8 +39,6 @@ describe SerialPreference::HasSerialPreferences do
       d.respond_to?(:vat_no).should be_true
       d.respond_to?(:max_invoice_items).should be_true
       d.respond_to?(:income_ledger_id).should be_true
-      d.respond_to?(:read_preference_attribute).should be_true
-      d.respond_to?(:write_preference_attribute).should be_true
     end
 
     it "should ensure that the readers returns the correct data" do
@@ -74,6 +72,17 @@ describe SerialPreference::HasSerialPreferences do
     it "should have query methods available for booleans" do
       DummyClass.new.respond_to?(:taxable?)
     end
+
+    it "should respond properly for default true preferences" do
+      DummyClass.new.taxable.should eq(true)
+      DummyClass.new.taxable?.should eq(true)
+    end
+
+    it "should respond properly for default false preferences" do
+      DummyClass.new.creditable.should eq(false)
+      DummyClass.new.creditable?.should eq(false)
+    end
+
   end
 
 
