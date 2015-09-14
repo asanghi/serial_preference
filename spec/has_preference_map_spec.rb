@@ -29,6 +29,10 @@ describe SerialPreference::HasSerialPreferences do
     it "should be possble to retrieve preference groups from class" do
       DummyClass.respond_to?(:preference_groups).should be_true
     end
+
+    it "should be possble to retrieve preference names from class" do
+      DummyClass.respond_to?(:preference_names).should be_true
+    end
   end
 
 

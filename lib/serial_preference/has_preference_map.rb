@@ -25,6 +25,10 @@ module SerialPreference
         _preference_map.definition_for(name)
       end
 
+      def preference_names
+        _preference_map.all_preference_names.map(&:to_sym)
+      end
+
       private
 
       def build_preference_definitions
