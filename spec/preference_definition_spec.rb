@@ -8,7 +8,7 @@ describe SerialPreference::PreferenceDefinition do
 
   it "should have proper accessors" do
     [:data_type, :name, :default, :required, :field_type].each do |a|
-      @blank_pref.respond_to?(a).should be_true
+      @blank_pref.respond_to?(a).should be_truthy
     end
   end
 
@@ -69,7 +69,7 @@ describe SerialPreference::PreferenceDefinition do
       @blank_pref.default.should be_nil
     end
     it "should be false for required" do
-      @blank_pref.required.should be_false
+      @blank_pref.required.should be_falsy
     end
     it "should have string field_type" do
       @blank_pref.field_type.should eq(:string)
@@ -162,19 +162,19 @@ describe SerialPreference::PreferenceDefinition do
       end
       it "should report false for falsy values" do
         [nil,false].each do |falsy|
-          @preference.value(falsy).should be_false
+          @preference.value(falsy).should be_falsy
         end
       end
 
       it "should report false for false looking values" do
         [0,"0","false","FALSE","False","no","NO","No"].each do |falsy|
-          @preference.value(falsy).should be_false
+          @preference.value(falsy).should be_falsy
         end
       end
 
       it "should report true for truthy values" do
         ["yes",true,100,0.1,[],{}].each do |truthy_value|
-          @preference.value(truthy_value).should be_true
+          @preference.value(truthy_value).should be_truthy
         end
       end
     end
