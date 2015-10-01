@@ -79,6 +79,7 @@ Or install it yourself as:
 ````ruby
     # List of Preferences
     Company.preference_names # => [:income_ledger_id]
+````
 
 ## Contributing
 
