@@ -9,22 +9,22 @@ describe SerialPreference::Preferenzer do
 
   it "should have proper readers" do
     [:preference_groups,:preference,:preference_groups,:all_preference_definitions,:all_preference_names,:current_group].each do |a|
-      @preferenzer.should respond_to(a)
+      expect(@preferenzer).to respond_to(a)
     end
   end
 
   context "default instance behaviour" do
     it "should report empty preference groups" do
-      @preferenzer.preference_groups.should include(@base)
+      expect(@preferenzer.preference_groups).to include(@base)
     end
     it "should report current_contex to be nil" do
-      @preferenzer.current_group.should eq(@base)
+      expect(@preferenzer.current_group).to eq(@base)
     end
     it "should report all preference name to be empty" do
-      @preferenzer.all_preference_names.should be_empty
+      expect(@preferenzer.all_preference_names).to be_empty
     end
     it "should report all preference definitions to be empty" do
-      @preferenzer.all_preference_definitions.should be_empty
+      expect(@preferenzer.all_preference_definitions).to be_empty
     end
   end
 
@@ -32,23 +32,23 @@ describe SerialPreference::Preferenzer do
 
     it "should allow for addition of preference using pref" do
       @preferenzer.pref("whatever")
-      @preferenzer.all_preference_names.should include("whatever")
+      expect(@preferenzer.all_preference_names).to include("whatever")
     end
 
     it "should allow for addition of preference using preference" do
       @preferenzer.preference("whatever")
-      @preferenzer.all_preference_names.should include("whatever")
+      expect(@preferenzer.all_preference_names).to include("whatever")
     end
 
     it "should alias preference to pref" do
-      described_class.instance_method(:pref).should eq(described_class.instance_method(:preference))
+      expect(described_class.instance_method(:pref)).to eq(described_class.instance_method(:preference))
     end
 
     it "should allow for addition of preference group" do
       @preferenzer.preference_group(:new_group) do
         preference :new_preference
       end
-      @preferenzer.all_preference_names.should include("new_preference")
+      expect(@preferenzer.all_preference_names).to include("new_preference")
     end
 
   end
@@ -64,15 +64,15 @@ describe SerialPreference::Preferenzer do
           switch_off_hour default: 23
         end
       end
-      @preferenzer.all_preference_names.should include("age","name","sex","email","switch_off_hour")
+      expect(@preferenzer.all_preference_names).to include("age","name","sex","email","switch_off_hour")
     end
 
     it "should allow for addition of preference in given context" do
-      @preferenzer.all_groups.should_not include(:new_group)
+      expect(@preferenzer.all_groups).to_not include(:new_group)
       @preferenzer.preference_group(:new_group) do
         preference "addition"
       end
-      @preferenzer.all_preference_names.should include("addition")
+      expect(@preferenzer.all_preference_names).to include("addition")
     end
 
     it "should allow overriding of preference if defined twice" do
@@ -80,14 +80,14 @@ describe SerialPreference::Preferenzer do
         preference :overriding_name
         preference :overriding_name
       end
-      @preferenzer.all_preference_names.should include("overriding_name", "overriding_name")
+      expect(@preferenzer.all_preference_names).to include("overriding_name", "overriding_name")
     end
 
     it "should allow addition of preference to an existing preference group" do
       @preferenzer.preference_group(:notifications) do
         preference :new_preference
       end
-      @preferenzer.all_preference_names.should include("new_preference")
+      expect(@preferenzer.all_preference_names).to include("new_preference")
     end
 
     it "should allow for preference names to be strings or symbols" do
@@ -95,7 +95,7 @@ describe SerialPreference::Preferenzer do
         preference "string"
         preference :symbol
       end
-      @preferenzer.all_preference_names.should include("string", "symbol")
+      expect(@preferenzer.all_preference_names).to include("string", "symbol")
     end
 
     it "should allow for preference_group names to be strings or symbols" do
@@ -105,7 +105,7 @@ describe SerialPreference::Preferenzer do
       @preferenzer.preference_group("string") do
         preference :symbol
       end
-      @preferenzer.all_groups.should include("string", :symbol)
+      expect(@preferenzer.all_groups).to include("string", :symbol)
     end
   end
 end

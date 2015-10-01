@@ -8,84 +8,84 @@ describe SerialPreference::PreferenceDefinition do
 
   it "should have proper accessors" do
     [:data_type, :name, :default, :required, :field_type].each do |a|
-      @blank_pref.respond_to?(a).should be_truthy
+      expect(@blank_pref.respond_to?(a)).to be_truthy
     end
   end
 
   it "should declare supported data types" do
-    described_class.constants.should include(:SUPPORTED_TYPES)
+    expect(described_class.constants).to include(:SUPPORTED_TYPES)
   end
 
   it "should stringify its name" do
-    described_class.new(:whatever).name.should eq("whatever")
+    expect(described_class.new(:whatever).name).to eq("whatever")
   end
 
   context "required behaviour" do
     it "should not be required when no required option provided" do
-      @blank_pref.should_not be_required
+      expect(@blank_pref).to_not be_required
     end
 
     it "should be required when required option is truthy" do
       [0,"yes","no","false",true].each do |truthy_values|
         p = described_class.new("whatever",{required: truthy_values})
-        p.should be_required
+        expect(p).to be_required
       end
     end
 
     it "should not be required when required option is falsy" do
       [false,nil].each do |falsy_values|
         p = described_class.new("whatever",{required: falsy_values})
-        p.should_not be_required
+        expect(p).to_not be_required
       end
     end
   end
 
   context "numericality behaviour" do
     it "should not be numerical when no data_type is provided" do
-      @blank_pref.should_not be_numerical
+      expect(@blank_pref).to_not be_numerical
     end
 
     it "should be numerical when data_type is numerical" do
       [:integer,:float,:decimal].each do |dt|
-        described_class.new("whatever",{data_type: dt}).should be_numerical
+        expect(described_class.new("whatever",{data_type: dt})).to be_numerical
       end
     end
 
     it "should be not numerical when data_type is non numerical" do
       [:string,:boolean,:password,:whatever].each do |dt|
-        described_class.new("whatever",{data_type: dt}).should_not be_numerical
+        expect(described_class.new("whatever",{data_type: dt})).to_not be_numerical
       end
     end
   end
 
   context "default behaviour" do
     it "should report correct name" do
-      @blank_pref.name.should eq("whatever")
+      expect(@blank_pref.name).to eq("whatever")
     end
     it "should be a string" do
-      @blank_pref.data_type.should eq(:string)
+      expect(@blank_pref.data_type).to eq(:string)
     end
     it "should have nil default" do
-      @blank_pref.default.should be_nil
+      expect(@blank_pref.default).to be_nil
     end
     it "should be false for required" do
-      @blank_pref.required.should be_falsy
+      expect(@blank_pref.required).to be_falsy
     end
     it "should have string field_type" do
-      @blank_pref.field_type.should eq(:string)
+      expect(@blank_pref.field_type).to eq(:string)
     end
   end
 
   context "field_type behaviour" do
     it "should report field_type as provided" do
-      described_class.new("whatever",{field_type: :xyz}).field_type.should eq(:xyz)
+      expect(described_class.new("whatever",{field_type: :xyz}).field_type).to eq(:xyz)
     end
     it "should report string for numerical data types" do
-      described_class.new("whatever",{data_type: :integer}).field_type.should eq(:string)
+      expect(described_class.new("whatever",{data_type: :integer}).field_type).to eq(:string)
     end
     it "should report data type for non numeric data types" do
       p = described_class.new("whatever",{data_type: :xyz})
-      p.field_type.should eq(p.data_type)
+      expect(p.field_type).to eq(p.data_type)
     end
   end
 
@@ -93,17 +93,17 @@ describe SerialPreference::PreferenceDefinition do
 
     context "when input is nil" do
       it "should report nil when no default is given" do
-        @blank_pref.value(nil).should be_nil
+        expect(@blank_pref.value(nil)).to be_nil
       end
 
       it "should report default when input is nil" do
         p = described_class.new("whatever",{default: "dog"})
-        p.value(nil).should eq("dog")
+        expect(p.value(nil)).to eq("dog")
       end
 
       it "should report default in appropriate data type when input is nil" do
         p = described_class.new("whatever",{default: "dog", data_type: :integer})
-        p.value(nil).should eq("dog".to_i)
+        expect(p.value(nil)).to eq("dog".to_i)
       end
     end
 
@@ -114,7 +114,7 @@ describe SerialPreference::PreferenceDefinition do
 
       it "should return correct strings as passthru" do
         ["",3.0,[],{},"dog",1].each do |input_val|
-          @preference.value(input_val).should eq(input_val.to_s)
+          expect(@preference.value(input_val)).to eq(input_val.to_s)
         end
       end
 
@@ -127,13 +127,13 @@ describe SerialPreference::PreferenceDefinition do
 
       it "should return correct integers" do
         ["",1,3.0,"dog"].each do |input_val|
-          @preference.value(input_val).should eq(input_val.to_i)
+          expect(@preference.value(input_val)).to eq(input_val.to_i)
         end
       end
 
       it "should report nil for non numeric input" do
         [[],{}].each do |input_val|
-          @preference.value(input_val).should be_nil
+          expect(@preference.value(input_val)).to be_nil
         end
       end
     end
@@ -145,13 +145,13 @@ describe SerialPreference::PreferenceDefinition do
 
       it "should return correct floats" do
         ["",1,3.0,"dog"].each do |input_val|
-          @preference.value(input_val).should eq(input_val.to_f)
+          expect(@preference.value(input_val)).to eq(input_val.to_f)
         end
       end
 
       it "should report nil for non numeric input" do
         [[],{}].each do |input_val|
-          @preference.value(input_val).should be_nil
+          expect(@preference.value(input_val)).to be_nil
         end
       end
     end
@@ -162,19 +162,19 @@ describe SerialPreference::PreferenceDefinition do
       end
       it "should report false for falsy values" do
         [nil,false].each do |falsy|
-          @preference.value(falsy).should be_falsy
+          expect(@preference.value(falsy)).to be_falsy
         end
       end
 
       it "should report false for false looking values" do
         [0,"0","false","FALSE","False","no","NO","No"].each do |falsy|
-          @preference.value(falsy).should be_falsy
+          expect(@preference.value(falsy)).to be_falsy
         end
       end
 
       it "should report true for truthy values" do
         ["yes",true,100,0.1,[],{}].each do |truthy_value|
-          @preference.value(truthy_value).should be_truthy
+          expect(@preference.value(truthy_value)).to be_truthy
         end
       end
     end

@@ -8,7 +8,7 @@ describe SerialPreference::HasSerialPreferences do
 
   context "default behaviour" do
     it "should return preferences as a default _preferences_attribute" do
-      DummyClass._preferences_attribute.should eq(:preferences)
+      expect(DummyClass._preferences_attribute).to eq(:preferences)
     end
     it "should return settings as a _preferences_attribute" do
       class OverriddenPreferenceAttributeClass < ActiveRecord::Base
@@ -17,21 +17,21 @@ describe SerialPreference::HasSerialPreferences do
           preference :abc
         end
       end
-      OverriddenPreferenceAttributeClass._preferences_attribute.should eq(:settings)
+      expect(OverriddenPreferenceAttributeClass._preferences_attribute).to eq(:settings)
     end
   end
 
   context "class methods behaviour" do
     it "should be possible to describe preference map thru preferences" do
-      DummyClass.respond_to?(:preferences).should be_truthy
+      expect(DummyClass.respond_to?(:preferences)).to be_truthy
     end
 
     it "should be possble to retrieve preference groups from class" do
-      DummyClass.respond_to?(:preference_groups).should be_truthy
+      expect(DummyClass.respond_to?(:preference_groups)).to be_truthy
     end
 
     it "should be possble to retrieve preference names from class" do
-      DummyClass.respond_to?(:preference_names).should be_truthy
+      expect(DummyClass.respond_to?(:preference_names)).to be_truthy
     end
   end
 
@@ -39,38 +39,38 @@ describe SerialPreference::HasSerialPreferences do
   context "should define accessors" do
     it "should have readers available" do
       d = DummyClass.new
-      d.respond_to?(:taxable).should be_truthy
-      d.respond_to?(:vat_no).should be_truthy
-      d.respond_to?(:max_invoice_items).should be_truthy
-      d.respond_to?(:income_ledger_id).should be_truthy
+      expect(d.respond_to?(:taxable)).to be_truthy
+      expect(d.respond_to?(:vat_no)).to be_truthy
+      expect(d.respond_to?(:max_invoice_items)).to be_truthy
+      expect(d.respond_to?(:income_ledger_id)).to be_truthy
     end
 
     it "should ensure that the readers returns the correct data" do
       d = DummyClass.new
       d.preferences = {:vat_no => "abc"}
-      d.vat_no.should eq("abc")
+      expect(d.vat_no).to eq("abc")
     end
 
     it "should have writers available" do
       d = DummyClass.new
-      d.respond_to?(:taxable=).should be_truthy
-      d.respond_to?(:vat_no=).should be_truthy
-      d.respond_to?(:max_invoice_items=).should be_truthy
-      d.respond_to?(:income_ledger_id=).should be_truthy
+      expect(d.respond_to?(:taxable=)).to be_truthy
+      expect(d.respond_to?(:vat_no=)).to be_truthy
+      expect(d.respond_to?(:max_invoice_items=)).to be_truthy
+      expect(d.respond_to?(:income_ledger_id=)).to be_truthy
     end
 
     it "should ensure that the writer write the correct data" do
       d = DummyClass.new
       d.vat_no = "abc"
-      d.vat_no.should eq("abc")
+      expect(d.vat_no).to eq("abc")
     end
 
     it "should ensure that the querier the correct data" do
       d = DummyClass.new
       d.taxable = true
-      d.should be_taxable
+      expect(d).to be_taxable
       d.taxable = false
-      d.should_not be_taxable
+      expect(d).to_not be_taxable
     end
 
     it "should have query methods available for booleans" do
@@ -78,13 +78,13 @@ describe SerialPreference::HasSerialPreferences do
     end
 
     it "should respond properly for default true preferences" do
-      DummyClass.new.taxable.should eq(true)
-      DummyClass.new.taxable?.should eq(true)
+      expect(DummyClass.new.taxable).to eq(true)
+      expect(DummyClass.new.taxable?).to eq(true)
     end
 
     it "should respond properly for default false preferences" do
-      DummyClass.new.creditable.should eq(false)
-      DummyClass.new.creditable?.should eq(false)
+      expect(DummyClass.new.creditable).to eq(false)
+      expect(DummyClass.new.creditable?).to eq(false)
     end
 
   end
