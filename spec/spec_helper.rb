@@ -2,6 +2,7 @@ $:.unshift File.expand_path('..', __FILE__)
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'active_support/all'
 require 'active_record'
+require 'yaml'
 require 'rspec'
 require 'shoulda'
 require "serial_preference/version"
