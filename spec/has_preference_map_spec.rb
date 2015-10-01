@@ -23,15 +23,15 @@ describe SerialPreference::HasSerialPreferences do
 
   context "class methods behaviour" do
     it "should be possible to describe preference map thru preferences" do
-      DummyClass.respond_to?(:preferences).should be_true
+      DummyClass.respond_to?(:preferences).should be_truthy
     end
 
     it "should be possble to retrieve preference groups from class" do
-      DummyClass.respond_to?(:preference_groups).should be_true
+      DummyClass.respond_to?(:preference_groups).should be_truthy
     end
 
     it "should be possble to retrieve preference names from class" do
-      DummyClass.respond_to?(:preference_names).should be_true
+      DummyClass.respond_to?(:preference_names).should be_truthy
     end
   end
 
@@ -39,10 +39,10 @@ describe SerialPreference::HasSerialPreferences do
   context "should define accessors" do
     it "should have readers available" do
       d = DummyClass.new
-      d.respond_to?(:taxable).should be_true
-      d.respond_to?(:vat_no).should be_true
-      d.respond_to?(:max_invoice_items).should be_true
-      d.respond_to?(:income_ledger_id).should be_true
+      d.respond_to?(:taxable).should be_truthy
+      d.respond_to?(:vat_no).should be_truthy
+      d.respond_to?(:max_invoice_items).should be_truthy
+      d.respond_to?(:income_ledger_id).should be_truthy
     end
 
     it "should ensure that the readers returns the correct data" do
@@ -53,10 +53,10 @@ describe SerialPreference::HasSerialPreferences do
 
     it "should have writers available" do
       d = DummyClass.new
-      d.respond_to?(:taxable=).should be_true
-      d.respond_to?(:vat_no=).should be_true
-      d.respond_to?(:max_invoice_items=).should be_true
-      d.respond_to?(:income_ledger_id=).should be_true
+      d.respond_to?(:taxable=).should be_truthy
+      d.respond_to?(:vat_no=).should be_truthy
+      d.respond_to?(:max_invoice_items=).should be_truthy
+      d.respond_to?(:income_ledger_id=).should be_truthy
     end
 
     it "should ensure that the writer write the correct data" do
