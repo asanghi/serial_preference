@@ -52,7 +52,7 @@ describe SerialPreference::PreferenceDefinition do
     end
 
     it "should be not numerical when data_type is non numerical" do
-      [:string,:boolean,:password,:whatever].each do |dt|
+      [:string,:boolean,:password,:whatever,:date].each do |dt|
         expect(described_class.new("whatever",{data_type: dt})).to_not be_numerical
       end
     end
@@ -175,6 +175,28 @@ describe SerialPreference::PreferenceDefinition do
       it "should report true for truthy values" do
         ["yes",true,100,0.1,[],{}].each do |truthy_value|
           expect(@preference.value(truthy_value)).to be_truthy
+        end
+      end
+    end
+
+    context "should report correct date values" do
+      before do
+        @preference = described_class.new("birthday",{data_type: :date})
+      end
+      it "should return correct dates" do
+        ["", "2014-08-01", "2014-08-01 14:00"].each do |input_val|
+          expect(@preference.value(input_val)).to eq(input_val.to_date)
+        end
+      end
+
+      it "should report default date when input is nil" do
+        p = described_class.new("birthday",{data_type: :date,default: "1990-05-08"})
+        expect(p.value(nil)).to eq(Date.parse("1990-05-08"))
+      end
+
+      it "should report nil for non date input" do
+        [[],{}].each do |input_val|
+          expect(@preference.value(input_val)).to be_nil
         end
       end
     end

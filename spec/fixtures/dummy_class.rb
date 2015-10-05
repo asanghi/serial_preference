@@ -5,6 +5,7 @@ class DummyClass < ActiveRecord::Base
     preference :required_number, data_type: :integer, required: :true
     preference :vat_no, required: false
     preference :max_invoice_items, data_type: :integer
+    preference :shipping_date, data_type: :date
     preference_group "Preferred Ledgers" do
       income_ledger_id data_type: :integer, default: 1
       creditable data_type: :boolean, default: false

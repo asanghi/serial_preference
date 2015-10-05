@@ -35,7 +35,6 @@ describe SerialPreference::HasSerialPreferences do
     end
   end
 
-
   context "should define accessors" do
     it "should have readers available" do
       d = DummyClass.new
@@ -43,6 +42,7 @@ describe SerialPreference::HasSerialPreferences do
       expect(d.respond_to?(:vat_no)).to be_truthy
       expect(d.respond_to?(:max_invoice_items)).to be_truthy
       expect(d.respond_to?(:income_ledger_id)).to be_truthy
+      expect(d.respond_to?(:shipping_date)).to be_truthy
     end
 
     it "should ensure that the readers returns the correct data" do
@@ -57,6 +57,7 @@ describe SerialPreference::HasSerialPreferences do
       expect(d.respond_to?(:vat_no=)).to be_truthy
       expect(d.respond_to?(:max_invoice_items=)).to be_truthy
       expect(d.respond_to?(:income_ledger_id=)).to be_truthy
+      expect(d.respond_to?(:shipping_date=)).to be_truthy
     end
 
     it "should ensure that the writer write the correct data" do
@@ -88,8 +89,6 @@ describe SerialPreference::HasSerialPreferences do
     end
 
   end
-
-
 
 =begin
   context "should define validations" do
