@@ -10,7 +10,7 @@ module SerialPreference
       self.name = name.to_s
       opts.assert_valid_keys(:data_type,:default,:required,:field_type)
       self.data_type = @type = opts[:data_type] || :string
-      @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s,opts[:default],@type.to_s)
+      @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s, opts[:default], column_type(@type))
       self.default = opts[:default]
       self.required = !!opts[:required]
       self.field_type = opts[:field_type]
@@ -79,5 +79,27 @@ module SerialPreference
       end
     end
 
+    def column_type(type)
+      if rails_42?
+        case type
+        when :boolean
+          ActiveRecord::Type::Boolean.new
+        when :integer
+          ActiveRecord::Type::Integer.new
+        when :float
+          ActiveRecord::Type::Float.new
+        when :decimal
+          ActiveRecord::Type::Decimal.new
+        else
+          ActiveRecord::Type::String.new
+        end
+      else
+        type.to_s
+      end
+    end
+
+    def rails_42?
+      ActiveRecord::VERSION::MAJOR >= 4 && ActiveRecord::VERSION::MINOR == 2
+    end
   end
 end
