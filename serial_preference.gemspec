@@ -24,5 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec', ">= 3.0.0"
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency "shoulda"
-
+  gem.add_development_dependency "appraisal"
 end
