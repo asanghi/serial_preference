@@ -87,6 +87,13 @@ describe SerialPreference::HasSerialPreferences do
       expect(DummyClass.new.creditable?).to eq(false)
     end
 
+    it "should clear existing preference value" do
+      d = DummyClass.new
+      d.vat_no = "abc"
+      expect(d.vat_no).to eq("abc")
+      d.vat_no = nil
+      expect(d.vat_no).to eq(nil)
+    end
   end
 
 
