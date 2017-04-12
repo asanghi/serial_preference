@@ -66,7 +66,7 @@ module SerialPreference
 
     def write_preference_attribute(store_attribute, key, value)
       attribute = send(store_attribute)
-      if value != attribute[key]
+      if value != attribute[key.to_sym]
         send :"#{store_attribute}_will_change!"
         attribute[key.to_sym] = value
       end
