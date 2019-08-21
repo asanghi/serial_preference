@@ -29,7 +29,7 @@ module SerialPreference
     end
 
     def numerical?
-      @column.number?
+      [:integer, :float, :decimal].include?(@column.type)
     end
 
     def boolean?
@@ -80,7 +80,7 @@ module SerialPreference
     end
 
     def column_type(type)
-      if rails_42?
+      if greater_or_equal_rails_42?
         case type
         when :boolean
           ActiveRecord::Type::Boolean.new
@@ -98,8 +98,8 @@ module SerialPreference
       end
     end
 
-    def rails_42?
-      ActiveRecord::VERSION::MAJOR >= 4 && ActiveRecord::VERSION::MINOR == 2
+    def greater_or_equal_rails_42?
+      ActiveRecord::VERSION::MAJOR > 4 || (ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 2)
     end
   end
 end
