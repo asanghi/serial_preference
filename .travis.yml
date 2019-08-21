@@ -1,8 +1,4 @@
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1
-  - 2.2
   - 2.3
   - 2.4
   - 2.5
@@ -12,31 +8,6 @@ before_install:
   - gem install bundler -v '< 2'
 matrix:
   allow_failures:
-    - rvm: 1.9.3
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails_5.gemfile
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails_5.2.2.gemfile
-    - rvm: 2.0.0
-      gemfile: gemfiles/rails_6.gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/rails_5.gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/rails_5.2.2.gemfile
-    - rvm: 2.1
-      gemfile: gemfiles/rails_6.gemfile
-    - rvm: 2.2
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.2
-      gemfile: gemfiles/rails_5.gemfile
-    - rvm: 2.2
-      gemfile: gemfiles/rails_5.2.2.gemfile
-    - rvm: 2.2
-      gemfile: gemfiles/rails_6.gemfile
     - rvm: 2.3
       gemfile: gemfiles/rails_6.gemfile
     - rvm: 2.4
