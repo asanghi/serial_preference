@@ -1,19 +1,34 @@
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1
-  - 2.2
   - 2.3
   - 2.4
+  - 2.5
   - ruby-head
+before_install:
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
 matrix:
   allow_failures:
-    - rvm: 1.9.3
-    - rvm: 2.0.0
+    - rvm: 2.3
+      gemfile: gemfiles/rails_6.gemfile
     - rvm: 2.4
+      gemfile: gemfiles/rails_4.gemfile
+    - rvm: 2.4
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: 2.4
+      gemfile: gemfiles/rails_6.gemfile
+    - rvm: 2.5
+      gemfile: gemfiles/rails_4.gemfile
+    - rvm: 2.5
+      gemfile: gemfiles/rails_4.2.gemfile
     - rvm: ruby-head
+      gemfile: gemfiles/rails_4.gemfile
+    - rvm: ruby-head
+      gemfile: gemfiles/rails_4.2.gemfile
 gemfile:
   - gemfiles/rails_4.gemfile
   - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_5.gemfile
+  - gemfiles/rails_5.2.2.gemfile
+  - gemfiles/rails_6.gemfile
 
 script: bundle exec rspec spec
