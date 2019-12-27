@@ -38,7 +38,13 @@ module SerialPreference
 
           key = preference.name
           define_method("#{key}=") do |value|
-            write_preference_attribute(self.class._preferences_attribute,key,self.class.preference_definition(key).value(value))
+            if self.preferences.class != Hash
+              self.class.reset_column_information
+              self.preferences = {}
+              write_preference_attribute(self.class._preferences_attribute,key,self.class.preference_definition(key).value(value))
+            else
+              write_preference_attribute(self.class._preferences_attribute,key,self.class.preference_definition(key).value(value))
+            end
           end
 
           define_method(key) do
