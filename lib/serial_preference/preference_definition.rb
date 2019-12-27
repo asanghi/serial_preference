@@ -1,7 +1,7 @@
 module SerialPreference
   class PreferenceDefinition
 
-    SUPPORTED_TYPES = [:string,:integer,:decimal,:float,:boolean]
+    SUPPORTED_TYPES = [:string,:integer,:decimal,:float,:boolean,:date]
 
     attr_accessor :data_type, :name, :default, :required, :field_type
 
@@ -61,7 +61,7 @@ module SerialPreference
         case data_type
         when :string, :password
           v.to_s
-        when  :integer
+        when :integer
           v.respond_to?(:to_i) ? v.to_i : nil
         when :float, :real
           v.respond_to?(:to_f) ? v.to_f : nil
@@ -73,6 +73,8 @@ module SerialPreference
           return false if v == "0"
           return false if v.to_s.downcase == "no"
           !!v
+        when :date
+          v.respond_to?(:to_date) ? v.to_date : nil
         else
           nil
         end
